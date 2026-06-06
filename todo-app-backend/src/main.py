@@ -5,8 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    await redis_client.ping()
+    print('redis and database is ready')
     yield
+    await redis_client.aclose()
+    print('redis connection closed')
 
 
 app = FastAPI(lifespan=lifespan)
