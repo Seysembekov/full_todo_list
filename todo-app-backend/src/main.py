@@ -2,6 +2,10 @@ from contextlib import asynccontextmanager
 from database import Base, engine
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from api.routers import tasks
+
+from redis_client import redis_client
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,4 +24,8 @@ app.add_middleware(
     allow_origins = ['http://localhost:3000'],
     allow_methods = ['*']
 )
+
+app.include_router(tasks.router, prefix='/api/v1')
+
+
 

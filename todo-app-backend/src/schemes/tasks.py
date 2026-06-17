@@ -1,14 +1,19 @@
-from pydantic import BaseModel
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict
+
 
 class TaskResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     title: str
-    completed: bool = False
+    completed: bool
 
 class CreateTask(BaseModel):
     title: str
     completed: bool = False
 
 class UpdateTask(BaseModel):
-    title: str | None
-    completed: bool = False
+    title: Optional[str] = None
+    completed: Optional[bool] = None

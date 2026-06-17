@@ -22,20 +22,22 @@ class TaskRepo:
         self.db.refresh(task)
         return task
 
-    def patch_task(self,id:int, data: UpdateTask):
-        task_p = self.db.query(Tasks).filter(Tasks.id == id).first()
-        if data.title is not None:
-            task_p.title = data.title
+    def patch_task(self, id: int, data: UpdateTask):
+        task = self.db.query(Tasks).filter(Tasks.id == id).first()
 
-        if data.completed is not False:
-            task_p.completed = data.completed
+        if data.title is not None:
+            task.title = data.title
+
+        if data.completed is not None:
+            task.completed = data.completed
 
         self.db.commit()
-        self.db.refresh(task_p)
-        return task_p
+        self.db.refresh(task)
 
+        return task
     def delete_task(self, id: int):
         task_d = self.db.query(Tasks).filter(Tasks.id == id).first()
         if task_d:
             self.db.delete(task_d)
             self.db.commit()
+        return task_d
